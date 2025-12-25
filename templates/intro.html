@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng An Ninh AI - Camera Security</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- CẤU HÌNH GIAO DIỆN CHUNG (DARK MODE) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body {
+            background-color: #0a0a0a; /* Nền đen đậm */
+            color: #e0e0e0; /* Chữ trắng xám */
+            line-height: 1.6;
+        }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- THANH MENU TRÊN CÙNG (NAVBAR) --- */
+        .navbar {
+            background-color: #1a1a1a;
+            border-bottom: 2px solid #d32f2f; /* Viền đỏ cảnh báo */
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #d32f2f; /* Màu đỏ */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .logo i { margin-right: 10px; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a {
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 5px 10px;
+        }
+        .nav-links a:hover {
+            color: #d32f2f;
+            border-bottom: 2px solid #d32f2f;
+        }
+
+        /* --- PHẦN HERO (BANNER CHÍNH) --- */
+        .hero {
+            height: 80vh; /* Chiều cao gần hết màn hình */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1f1f1f 0%, #000000 100%);
+            padding: 20px;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(211, 47, 47, 0.6);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 40px;
+            color: #aaa;
+        }
+        .btn-start {
+            padding: 15px 40px;
+            background-color: #d32f2f;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(211, 47, 47, 0.5);
+            animation: pulse 2s infinite;
+        }
+        .btn-start:hover { background-color: #b71c1c; transform: scale(1.05); }
+
+        /* --- PHẦN NỘI DUNG (SẢN PHẨM & TEAM) --- */
+        .section {
+            padding: 80px 50px;
+            border-top: 1px solid #333;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+            color: #d32f2f;
+            text-transform: uppercase;
+        }
+        
+        /* Grid cho Team */
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .member-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .member-card:hover { transform: translateY(-10px); border-color: #d32f2f; }
+        .avatar {
+            width: 100px; height: 100px;
+            background-color: #333;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: #666;
+            border: 2px solid #d32f2f;
+        }
+        .member-info h3 { color: white; margin-bottom: 5px; }
+        .member-info p { color: #888; font-size: 0.9rem; }
+
+        /* Grid cho tính năng sản phẩm */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-item {
+            background: #111;
+            padding: 20px;
+            border-left: 3px solid #d32f2f;
+        }
+        .feature-item h4 { margin-bottom: 10px; color: #fff; }
+
+        /* Footer */
+        footer {
+            background-color: #0f0f0f;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #333;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Hiệu ứng đập nhẹ nút bấm */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(211, 47, 47, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> VKU SECURITY
+        </div>
+        <div class="nav-links">
+            <a href="#">Trang chủ</a>
+            <a href="#product">Về Sản Phẩm</a>
+            <a href="#team">Đội Ngũ</a>
+            <a href="https://vku.udn.vn" target="_blank">Trường VKU</a>
+        </div>
+        <div style="color: #666; font-size: 0.9rem;">
+            <i class="fas fa-clock"></i> Phiên bản v1.0
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>HỆ THỐNG CẢNH BÁO XÂM NHẬP AI</h1>
+        <p>Giải pháp giám sát thông minh sử dụng thị giác máy tính & trí tuệ nhân tạo. Phát hiện người lạ, cảnh báo tức thời, bảo vệ an ninh tuyệt đối.</p>
+        
+        <a href="/monitor" class="btn-start">
+            <i class="fas fa-video"></i> BẮT ĐẦU GIÁM SÁT
+        </a>
+    </header>
+
+    <section id="product" class="section">
+        <h2 class="section-title">Tính Năng Nổi Bật</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4><i class="fas fa-robot"></i> AI Nhận Diện</h4>
+                <p>Sử dụng thuật toán OpenCV & Deep Learning để phân biệt người quen và người lạ với độ chính xác cao.</p>
+            </div>
+            <div class="feature-item">
+                <h4><i class="fas fa-bolt"></i> Cảnh Báo Real-time</h4>
+                <p>Phát hiện xâm nhập và gửi cảnh báo ngay lập tức theo thời gian thực, độ trễ cực thấp.</p>
+            </div>
+            <div class="feature-item">
+                <h4><i class="fas fa-database"></i> Dữ Liệu Bảo Mật</h4>
+                <p>Dữ liệu khuôn mặt được mã hóa và lưu trữ cục bộ, đảm bảo quyền riêng tư cho người dùng.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="team" class="section" style="background-color: #111;">
+        <h2 class="section-title">Đội Ngũ Phát Triển</h2>
+        <div class="team-grid">
+            <div class="member-card">
+                <div class="avatar"><i class="fas fa-user-secret"></i></div>
+                <div class="member-info">
+                    <h3>Trần Anh Dũng</h3>
+                    <p style="color: #d32f2f;">Lead Developer</p>
+                    <hr style="border: 0; border-top: 1px solid #333; margin: 10px 0;">
+                    <p>MSSV: 25NS008</p>
+                    <p>Lớp: 25NS - Khoa KTMT&ĐT</p>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <div class="avatar"><i class="fas fa-user-shield"></i></div>
+                <div class="member-info">
+                    <h3>Đoàn Văn Tuấn An</h3>
+                    <p style="color: #d32f2f;">System Engineer</p>
+                    <hr style="border: 0; border-top: 1px solid #333; margin: 10px 0;">
+                    <p>MSSV: 25NS002</p>
+                    <p>Lớp: 25NS - Khoa KTMT&ĐT</p>
+                </div>
+            </div>
+        </div>
+        
+        <p style="text-align: center; margin-top: 40px; color: #888;">
+            Giảng viên hướng dẫn: <strong style="color: white;">Ts. Đặng Quang Hiển</strong>
+        </p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VKU Security Project. All rights reserved.</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Trường Đại học Công nghệ Thông tin & Truyền thông Việt - Hàn</p>
+    </footer>
+
+</body>
+</html>

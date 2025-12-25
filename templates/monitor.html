@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SURVEILLANCE | VKU SECURITY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. CẤU HÌNH GIAO DIỆN CHUNG --- */
+        body {
+            background-color: #050505;
+            color: #00f3ff;
+            font-family: 'Share Tech Mono', monospace;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            /* Họa tiết lưới nền (Grid Background) */
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* --- 2. CHẾ ĐỘ BÁO ĐỘNG (DANGER) --- */
+        body.danger-mode {
+            background-color: #1a0000;
+            color: #ff0000;
+            box-shadow: inset 0 0 80px rgba(255, 0, 0, 0.4);
+            animation: shake 0.5s infinite;
+            /* Đổi màu lưới sang đỏ */
+            background-image: 
+                linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+        }
+
+        /* --- 3. HEADER --- */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 30px; border-bottom: 2px solid #00f3ff;
+            background: rgba(0,0,0,0.8); z-index: 10;
+        }
+        body.danger-mode .header { border-bottom-color: #ff0000; }
+        .title { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; letter-spacing: 2px; }
+
+        /* --- 4. MAIN LAYOUT --- */
+        .main-wrapper {
+            flex: 1; display: flex; position: relative; width: 100%; height: 100%;
+        }
+
+        /* Cột trang trí bên trái (Fake Code) */
+        .sidebar-left {
+            width: 150px; padding: 20px; font-size: 0.7rem; opacity: 0.7;
+            border-right: 1px solid rgba(0, 243, 255, 0.3);
+            display: flex; flex-direction: column; gap: 5px;
+            overflow: hidden;
+        }
+        body.danger-mode .sidebar-left { border-right-color: rgba(255, 0, 0, 0.3); }
+
+        /* Cột trang trí bên phải (Radar) */
+        .sidebar-right {
+            width: 150px; padding: 20px; display: flex; flex-direction: column; align-items: center;
+            border-left: 1px solid rgba(0, 243, 255, 0.3);
+        }
+        body.danger-mode .sidebar-right { border-left-color: rgba(255, 0, 0, 0.3); }
+
+        /* Khu vực Camera chính giữa */
+        .center-stage {
+            flex: 1; display: flex; justify-content: center; align-items: center; position: relative;
+        }
+
+        /* --- 5. CAMERA FRAME --- */
+        .camera-frame {
+            position: relative; border: 2px solid #00f3ff; padding: 5px;
+            background: #000; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            max-width: 90%; max-height: 80vh;
+        }
+        body.danger-mode .camera-frame {
+            border-color: #ff0000; box-shadow: 0 0 50px rgba(255, 0, 0, 0.8);
+        }
+        .camera-feed { display: block; max-width: 100%; height: auto; border: 1px solid #111; }
+
+        /* --- 6. CÁC HIỆU ỨNG TRANG TRÍ --- */
+        
+        /* Chữ Cảnh Báo */
+        .warning-overlay {
+            position: absolute; top: 50%; left: 0; width: 100%; text-align: center;
+            transform: translateY(-50%); font-size: 5rem; font-weight: 900;
+            color: transparent; -webkit-text-stroke: 2px red; text-transform: uppercase;
+            z-index: 100; display: none; font-family: 'Orbitron';
+            animation: blink 0.3s infinite; pointer-events: none;
+        }
+        body.danger-mode .warning-overlay { display: block; }
+
+        /* Radar Animation */
+        .radar {
+            width: 100px; height: 100px; border: 2px solid #00f3ff; border-radius: 50%;
+            position: relative; background: radial-gradient(circle, transparent 20%, rgba(0, 243, 255, 0.1) 60%);
+            box-shadow: 0 0 10px #00f3ff;
+        }
+        body.danger-mode .radar { border-color: red; box-shadow: 0 0 10px red; background: radial-gradient(circle, transparent 20%, rgba(255, 0, 0, 0.1) 60%); }
+        
+        .radar::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 70%, rgba(0, 243, 255, 0.8));
+            animation: radar-spin 2s linear infinite;
+        }
+        body.danger-mode .radar::before { background: conic-gradient(from 0deg, transparent 70%, rgba(255, 0, 0, 0.8)); }
+
+        /* Góc vuông trang trí */
+        .corner { position: absolute; width: 20px; height: 20px; border: 3px solid #00f3ff; transition: 0.3s; }
+        body.danger-mode .corner { border-color: #ff0000; }
+        .tl { top: -2px; left: -2px; border-bottom: none; border-right: none; }
+        .tr { top: -2px; right: -2px; border-bottom: none; border-left: none; }
+        .bl { bottom: -2px; left: -2px; border-top: none; border-right: none; }
+        .br { bottom: -2px; right: -2px; border-top: none; border-left: none; }
+
+        /* --- 7. FOOTER --- */
+        .controls { padding: 15px; text-align: center; background: rgba(0,0,0,0.9); z-index: 10; border-top: 1px solid #333; }
+        .btn-back {
+            padding: 10px 30px; border: 1px solid #00f3ff; color: #00f3ff; background: rgba(0, 243, 255, 0.1);
+            text-decoration: none; font-family: 'Orbitron'; text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .btn-back:hover { background: #00f3ff; color: #000; box-shadow: 0 0 15px #00f3ff; }
+        body.danger-mode .btn-back { border-color: red; color: red; background: rgba(255, 0, 0, 0.1); }
+        body.danger-mode .btn-back:hover { background: red; color: white; box-shadow: 0 0 15px red; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes shake { 0% { transform: translate(1px, 1px); } 100% { transform: translate(-1px, -1px); } }
+        @keyframes radar-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="title" id="status-title"><i class="fas fa-eye"></i> SYSTEM ACTIVE</div>
+        
+        <div style="font-size: 1.2rem; font-weight: bold;" id="clock">00:00:00</div>
+        
+        <div id="status-text">SCANNING...</div>
+    </header>
+
+    <div class="main-wrapper">
+        
+        <div class="sidebar-left">
+            <p>> CPU_CORE: OK</p>
+            <p>> MEMORY: 4096MB</p>
+            <p>> NET_SPEED: 1Gbps</p>
+            <p>> ENCRYPTION: AES</p>
+            <p style="color: #666">----------------</p>
+            <div id="fake-log" style="color: #00f3ff; font-family: monospace;">
+                > init_sequence()<br>
+                > loading_libs...
+            </div>
+        </div>
+
+        <div class="center-stage">
+            <div class="warning-overlay">INTRUDER DETECTED</div>
+            
+            <div class="camera-frame">
+                <div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <img src="{{ url_for('video_feed') }}" class="camera-feed" alt="Camera Feed">
+            </div>
+        </div>
+
+        <div class="sidebar-right">
+            <div style="margin-bottom: 10px;">RADAR SCAN</div>
+            <div class="radar"></div>
+            
+            <div style="margin-top: 50px; text-align: center;">
+                <p>LATENCY</p>
+                <h2 style="margin: 0;">12ms</h2>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <p>FPS</p>
+                <h2 style="margin: 0;">24.0</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <a href="/" class="btn-back">RETURN TO DASHBOARD</a>
+        <div style="margin-top: 10px; font-size: 10px; color: #666;">
+            CLICK ANYWHERE TO ENABLE AUDIO ALARM
+        </div>
+    </div>
+
+    <script>
+        // 1. CẤU HÌNH ÂM THANH (Nhớ folder tên là 'static')
+        const alarmSound = new Audio("{{ url_for('static', filename='alarm.mp3') }}");
+        alarmSound.loop = true; 
+        alarmSound.volume = 1.0;
+        let audioAllowed = false;
+
+        document.body.addEventListener('click', () => {
+            if (!audioAllowed) {
+                audioAllowed = true;
+                alarmSound.play().then(() => {
+                    alarmSound.pause(); alarmSound.currentTime = 0;
+                }).catch(e => console.log("Audio Error:", e));
+            }
+        });
+
+        // 2. ĐỒNG HỒ & FAKE LOG
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+            
+            // Tạo hiệu ứng chữ chạy ngẫu nhiên bên trái
+            const logs = ["> analyzing_frame...", "> check_db...", "> ping_server...", "> updating...", "> secure_hsk..."];
+            const randomLog = logs[Math.floor(Math.random() * logs.length)];
+            document.getElementById('fake-log').innerHTML += `<br>${randomLog}`;
+            // Giới hạn độ dài log cho đỡ lag
+            if(document.getElementById('fake-log').innerHTML.length > 200) {
+                 document.getElementById('fake-log').innerHTML = "> system_ready...";
+            }
+        }, 1000);
+
+        // 3. LOGIC CHECK TRẠNG THÁI (Giữ nguyên)
+        setInterval(() => {
+            fetch('/status')
+                .then(response => response.json())
+                .then(data => {
+                    const body = document.body;
+                    const title = document.getElementById('status-title');
+                    const text = document.getElementById('status-text');
+
+                    if (data.status === 'danger') {
+                        if (!body.classList.contains('danger-mode')) {
+                            body.classList.add('danger-mode');
+                            title.innerHTML = '<i class="fas fa-exclamation-triangle"></i> SECURITY BREACH';
+                            text.innerText = "UNAUTHORIZED!";
+                            if (audioAllowed) alarmSound.play().catch(e => {});
+                        }
+                    } else {
+                        if (body.classList.contains('danger-mode')) {
+                            body.classList.remove('danger-mode');
+                            title.innerHTML = '<i class="fas fa-eye"></i> SYSTEM ACTIVE';
+                            text.innerText = "SCANNING...";
+                            alarmSound.pause(); alarmSound.currentTime = 0;
+                        }
+                    }
+                })
+                .catch(err => console.log(err));
+        }, 500);
+    </script>
+</body>
+</html>
