@@ -3,274 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VKU Security Cam | Nhóm 9</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>AI SECURITY | GROUP 9 VKU</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- 1. CẤU HÌNH CHUNG (UI/UX) --- */
+        /* --- 1. CẤU HÌNH GIAO DIỆN CYBERPUNK --- */
         :root {
-            --primary-color: #d32f2f; /* Màu đỏ cảnh báo */
-            --secondary-color: #2196f3; /* Màu xanh công nghệ */
-            --bg-color: #0a0a0a; /* Nền đen sâu */
-            --card-bg: #1a1a1a; /* Nền thẻ bài */
-            --text-color: #e0e0e0;
+            --neon-blue: #00f3ff;
+            --neon-red: #ff0000;
+            --bg-dark: #050505;
+            --card-bg: rgba(20, 20, 20, 0.8);
+            --text-main: #e0e0e0;
         }
 
-        html { scroll-behavior: smooth; } /* Cuộn mượt */
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            /* Họa tiết lưới nền giống Monitor */
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            overflow-x: hidden;
         }
 
         /* --- 2. THANH MENU (NAVBAR) --- */
         nav {
             background: rgba(0, 0, 0, 0.9);
             padding: 15px 50px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--primary-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            display: flex; justify-content: space-between; align-items: center;
             box-sizing: border-box;
+            backdrop-filter: blur(5px);
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem; font-weight: 900;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
             letter-spacing: 2px;
         }
 
         .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 30px;
-            font-weight: 500;
-            transition: 0.3s;
+            color: #fff; text-decoration: none;
+            margin-left: 30px; font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem; transition: 0.3s;
         }
 
-        .nav-links a:hover { color: var(--primary-color); }
+        .nav-links a:hover { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
 
-        /* --- 3. PHẦN HERO (BANNER ĐẦU TRANG) --- */
+        /* --- 3. PHẦN HERO (BANNER) --- */
         .hero {
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: radial-gradient(circle, #1f1f1f 0%, #000 100%);
-            padding: 20px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
+            position: relative;
+        }
+        
+        /* Hiệu ứng bóng mờ phía sau */
+        .hero::before {
+            content: ''; position: absolute; width: 300px; height: 300px;
+            background: var(--neon-blue); filter: blur(150px); opacity: 0.2;
+            z-index: -1; border-radius: 50%;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            background: -webkit-linear-gradient(#fff, #999);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem; margin-bottom: 10px; line-height: 1.1;
+            color: white; text-transform: uppercase;
+            text-shadow: 2px 2px 0px var(--neon-blue);
         }
+        
+        .hero h1 span { color: var(--neon-blue); }
 
         .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            color: #bbb;
-            margin-bottom: 40px;
+            font-size: 1.3rem; max-width: 700px; color: #aaa;
+            margin-bottom: 40px; letter-spacing: 1px;
+            border-left: 3px solid var(--neon-red); padding-left: 15px;
         }
+
+        /* Nút bấm công nghệ */
+        .btn-group { display: flex; gap: 20px; }
 
         .btn {
             padding: 15px 40px;
-            background: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: 0.3s;
-            box-shadow: 0 0 20px rgba(211, 47, 47, 0.4);
+            text-decoration: none; font-weight: bold; font-family: 'Orbitron';
+            text-transform: uppercase; letter-spacing: 2px;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue); background: rgba(0, 243, 255, 0.05);
+            transition: 0.3s; clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%);
         }
 
         .btn:hover {
-            transform: scale(1.05);
-            background: #b71c1c;
+            background: var(--neon-blue); color: #000;
+            box-shadow: 0 0 30px var(--neon-blue);
+            transform: translateY(-3px);
         }
 
-        /* --- 4. CÁC KHỐI NỘI DUNG (SECTIONS) --- */
-        section { padding: 80px 20px; }
+        .btn-red {
+            border-color: var(--neon-red); color: var(--neon-red);
+            background: rgba(255, 0, 0, 0.05);
+        }
+        .btn-red:hover {
+            background: var(--neon-red); color: #fff;
+            box-shadow: 0 0 30px var(--neon-red);
+        }
+
+        /* --- 4. CÁC KHỐI NỘI DUNG --- */
+        section { padding: 100px 20px; }
         
         .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 60px;
-            color: var(--secondary-color);
-            text-transform: uppercase;
+            text-align: center; font-family: 'Orbitron';
+            font-size: 2.5rem; margin-bottom: 60px;
+            color: #fff; text-transform: uppercase;
+            position: relative; display: inline-block; left: 50%; transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: ''; display: block; width: 60%; height: 3px;
+            background: var(--neon-blue); margin: 10px auto 0;
+            box-shadow: 0 0 10px var(--neon-blue);
         }
 
         /* Grid hiển thị tính năng */
         .features-grid {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex; justify-content: center; gap: 30px;
+            flex-wrap: wrap; max-width: 1200px; margin: 0 auto;
         }
 
         .card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 15px;
-            width: 300px;
-            text-align: center;
-            border: 1px solid #333;
-            transition: 0.3s;
+            background: var(--card-bg); padding: 30px;
+            width: 300px; text-align: center;
+            border: 1px solid #333; position: relative;
+            transition: 0.3s; overflow: hidden;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--secondary-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .card:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
+        
+        /* Góc trang trí thẻ */
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
         }
 
-        .card i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
+        .card i { font-size: 3rem; color: var(--neon-blue); margin-bottom: 20px; }
+        .card h3 { font-family: 'Orbitron'; color: white; margin-bottom: 10px; }
 
         /* Phần Video Demo */
         .video-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            border: 2px solid #333;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(33, 150, 243, 0.2);
+            max-width: 900px; margin: 0 auto;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.1);
+            background: #000;
         }
         
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
         /* Phần Team */
-        .team-container {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            flex-wrap: wrap;
-        }
-        .member {
-            text-align: center;
-        }
+        .team-container { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
+        
+        .member { text-align: center; }
+        
         .avatar {
-            width: 150px; height: 150px;
-            background: #333;
-            border-radius: 50%;
+            width: 160px; height: 160px;
+            background: #111; border-radius: 50%;
             margin: 0 auto 20px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 3rem; color: #555;
-            border: 3px solid var(--secondary-color);
+            font-size: 3rem; color: #444;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+            transition: 0.5s;
         }
+        
+        .member:hover .avatar { transform: rotate(360deg); border-color: var(--neon-red); box-shadow: 0 0 30px var(--neon-red); color: var(--neon-red); }
+
+        .member h3 { font-family: 'Orbitron'; font-size: 1.5rem; margin: 10px 0 5px; }
+        .role { font-size: 0.9rem; letter-spacing: 2px; color: #888; text-transform: uppercase; }
 
         /* Footer */
         footer {
-            text-align: center;
-            padding: 40px;
-            background: #000;
-            border-top: 1px solid #333;
-            font-size: 0.9rem;
-            color: #777;
+            text-align: center; padding: 40px; background: #020202;
+            border-top: 1px solid #222; font-size: 0.9rem; color: #666;
         }
+        footer span { color: var(--neon-blue); }
 
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-shield-alt"></i> VKU CAM</div>
+        <div class="logo"><i class="fas fa-eye"></i> VKU SECURITY</div>
         <div class="nav-links">
-            <a href="#home">Trang chủ</a>
-            <a href="#features">Tính năng</a>
-            <a href="#demo">Demo</a>
-            <a href="#team">Nhóm 9</a>
+            <a href="#home">HOME</a>
+            <a href="#features">FEATURES</a>
+            <a href="#demo">DEMO</a>
+            <a href="#team">TEAM 9</a>
         </div>
     </nav>
 
     <section id="home" class="hero">
-        <h1>HỆ THỐNG CẢNH BÁO XÂM NHẬP AI</h1>
-        <p>Giải pháp giám sát thông minh sử dụng thị giác máy tính & trí tuệ nhân tạo. Phát hiện người lạ, cảnh báo tức thời, bảo vệ an ninh tuyệt đối.</p>
-        <a href="#demo" class="btn"><i class="fas fa-play"></i> XEM DEMO NGAY</a>
+        <h1>AI CAMERA <br><span>SECURITY SYSTEM</span></h1>
+        <p>Hệ thống giám sát thông minh sử dụng Computer Vision & LBPH Algorithm. Phát hiện xâm nhập, cảnh báo thời gian thực.</p>
+        
+        <div class="btn-group">
+            <a href="#demo" class="btn"><i class="fas fa-play"></i> WATCH DEMO</a>
+            <a href="https://github.com/tangerine-sugar/camera-security-ai" target="_blank" class="btn btn-red">
+                <i class="fab fa-github"></i> SOURCE CODE
+            </a>
+        </div>
     </section>
 
     <section id="features">
-        <h2 class="section-title">Công Nghệ Nổi Bật</h2>
+        <h2 class="section-title">SYSTEM FEATURES</h2>
         <div class="features-grid">
             <div class="card">
-                <i class="fas fa-robot"></i>
-                <h3>AI Nhận Diện</h3>
-                <p>Sử dụng thuật toán OpenCV & LBPH để phân biệt người quen/người lạ với độ chính xác cao.</p>
+                <i class="fas fa-fingerprint"></i>
+                <h3>FACE RECOGNITION</h3>
+                <p>Sử dụng thuật toán LBPH để phân tích đặc điểm khuôn mặt và đối chiếu với dữ liệu Admin.</p>
             </div>
             <div class="card">
                 <i class="fas fa-bolt"></i>
-                <h3>Real-time</h3>
-                <p>Xử lý hình ảnh và đưa ra cảnh báo trong thời gian thực (độ trễ < 0.1s).</p>
+                <h3>REAL-TIME</h3>
+                <p>Tốc độ xử lý khung hình cao (~24 FPS), độ trễ cảnh báo dưới 0.1 giây.</p>
             </div>
             <div class="card">
-                <i class="fas fa-bell"></i>
-                <h3>Cảnh Báo 24/7</h3>
-                <p>Tự động gửi thông báo khi phát hiện đối tượng lạ xâm nhập vùng giám sát.</p>
+                <i class="fas fa-exclamation-triangle" style="color: var(--neon-red)"></i>
+                <h3>INSTANT ALERT</h3>
+                <p>Tự động phát âm thanh cảnh báo và chuyển giao diện đỏ khi phát hiện người lạ.</p>
             </div>
         </div>
     </section>
 
-    <section id="demo" style="background: #111;">
-        <h2 class="section-title">Video Demo Thực Tế</h2>
+    <section id="demo">
+        <h2 class="section-title">PROJECT DEMO</h2>
         <div class="video-wrapper">
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/LINK_VIDEO_CUA_BAN" frameborder="0" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
-        <p style="text-align: center; margin-top: 20px; color: #888;">* Video quay lại quá trình hoạt động của code Python trên máy cá nhân</p>
+        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem;">
+            * Video demo quá trình hoạt động thực tế trên Localhost
+        </p>
     </section>
 
     <section id="team">
-        <h2 class="section-title">Đội Ngũ Thực Hiện</h2>
+        <h2 class="section-title">DEVELOPMENT TEAM</h2>
         <div class="team-container">
             <div class="member">
-                <div class="avatar"><i class="fas fa-user-secret"></i></div>
-                <h3>Trần Anh Dũng</h3>
-                <p style="color: var(--primary-color);">Trưởng nhóm / AI Dev</p>
-                <p>25NS008</p>
+                <div class="avatar"><i class="fas fa-code"></i></div>
+                <h3>DUNG TRAN</h3>
+                <div class="role">LEAD DEVELOPER / AI ENGINEER</div>
+                <div style="color: var(--neon-blue); margin-top:5px">25NS008</div>
             </div>
             <div class="member">
-                <div class="avatar"><i class="fas fa-laptop-code"></i></div>
-                <h3>Đoàn Văn Tuấn An</h3>
-                <p style="color: var(--secondary-color);">Web Dev / Báo cáo</p>
-                <p>25NS002</p>
+                <div class="avatar"><i class="fas fa-file-alt"></i></div>
+                <h3>AN DOAN</h3>
+                <div class="role">HARDWARE / DOCUMENTATION</div>
+                <div style="color: var(--neon-blue); margin-top:5px">25NS002</div>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 Dự án Nhập môn ngành & KNM - Lớp 25NS</p>
-        <p>Khoa Kỹ thuật Máy tính & Điện tử - Trường Đại học CNTT & TT Việt - Hàn (VKU)</p>
-        <p>GVHD: TS. Đặng Quang Hiển</p>
+        <p>&copy; 2025 <span>GROUP 9</span> - AI CAMERA PROJECT</p>
+        <p>VKU - Vietnam-Korea University of Information and Communication Technology</p>
+        <p>SUPERVISOR: <span>Dr. DANG QUANG HIEN</span></p>
     </footer>
 
 </body>
